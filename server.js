@@ -4,10 +4,26 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const cron = require('node-cron');
+const cors = require('cors'); // Import CORS middleware
 
 const app = express();
 const port = 5000;
-const apiUrl = 'http://esp32-weather.local/info';
+const apiUrl = 'http://esp321-weather.local/info';
+
+// CORS configuration
+const allowedOrigins = ['http://localhost:3000', 'http://pn.local:3000', 'http://pn.local'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Deny the request
+    }
+  },
+};
+
+// Use CORS middleware with the specified options
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
